@@ -31,6 +31,8 @@ yarn-error.*
 *.pem
 
 # local env files
+.env
+.env.local  # If you make variants later
 .env*.local
 
 # typescript
@@ -40,3 +42,4 @@ yarn-error.*
 /ios
 /android
 google-services.json
+

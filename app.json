@@ -2,6 +2,7 @@
   "expo": {
     "name": "safe-kids-kenya",
     "slug": "safe-kids-kenya",
+    "scheme": "safekidskenya",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

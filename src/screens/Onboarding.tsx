@@ -10,16 +10,16 @@ const Onboarding = () => {
             Alert.alert("Ooops!", "Please enter both email and password.");
             return;
         }
-        Alert.alert("Success!", "We have your data stored.`Welcome ${email.split('@')[0]} 👋");
+        Alert.alert("Success!", `We have your data stored. Welcome ${email.split('@')[0]} 👋`);
     };
 
     return (
         <View className="flex-1 bg-secondary justify-center px-6">
             {/* Logo/Title */}
         <View className="items-center mb-12">
-            <Text className="text-5xl font-bold text-accent ">Safe Kids</Text>"
+            <Text className="text-5xl font-bold text-accent ">Safe Kids</Text>
             <Text className="text-2xl text-primary mt-2">Kenya</Text>
-            <Text className="text-sm text-accent/70 mt-2">Your child's safety, our priority.</Text>
+            <Text className="text-sm text-accent mt-2">Your child's safety, our priority.</Text>
         </View>
 
         {/* Form */}

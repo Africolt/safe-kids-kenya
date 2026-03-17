@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   View, Text, ScrollView, TouchableOpacity,
-  StyleSheet, Image, Switch, Alert
+  StyleSheet, Switch, Alert
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -14,26 +14,27 @@ const MENU_SECTIONS = [
   {
     title: 'Account',
     items: [
-      { icon: '👤', label: 'Edit Profile', route: '/edit-profile' },
-      { icon: '🔔', label: 'Notifications', route: '/notifications', toggle: true },
-      { icon: '📍', label: 'Safe Zones', route: '/zones' },
-      { icon: '👨‍👩‍👧', label: 'Family Members', route: '/family' },
+      { icon: '👤', label: 'Edit Profile', route: '/(app)/edit-profile' },
+      { icon: '🔔', label: 'Notifications', route: '/(app)/notifications', toggle: true },
+      { icon: '📍', label: 'Safe Zones', route: '/(app)/map' },
+      { icon: '👨‍👩‍👧', label: 'Family Members', route: '/(app)/child-setup' },
     ],
   },
   {
     title: 'Safety',
     items: [
-      { icon: '🛡️', label: 'Security Settings', route: '/security-settings' },
-      { icon: '📞', label: 'Emergency Contacts', route: '/emergency' },
-      { icon: '🗺️', label: 'Location Sharing', route: '/location', toggle: true },
+      { icon: '🛡️', label: 'Security Settings', route: '/(app)/(tabs)/security' },
+      { icon: '📞', label: 'Emergency Contacts', route: '/(app)/emergency' },
+      { icon: '🗺️', label: 'Location Sharing', route: '/(app)/map', toggle: true },
     ],
   },
   {
     title: 'Support',
     items: [
-      { icon: '❓', label: 'Help & FAQ', route: '/help' },
-      { icon: '⭐', label: 'Rate the App', route: '/rate' },
-      { icon: '📋', label: 'Privacy Policy', route: '/privacy' },
+      { icon: '❓', label: 'Help & FAQ', route: '/(app)/parental-guidance' },
+      { icon: '⭐', label: 'Rate the App', route: '/(app)/terms-of-service' },
+      { icon: '📋', label: 'Privacy Policy', route: '/(app)/privacy-policy' },
+      { icon: '🎨', label: 'Theme & Appearance', route: '/(app)/theme-settings' },
     ],
   },
 ];
@@ -75,7 +76,38 @@ export default function ProfileScreen() {
     ]);
   };
 
-  const getInitials = (email: string) =>
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      'Delete Account',
+      'This will permanently delete your account and all your data including children profiles and booking history. This cannot be undone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete Forever', style: 'destructive',
+          onPress: async () => {
+            try {
+              const user = auth.currentUser;
+              if (!user) return;
+              const { doc, deleteDoc, collection, getDocs } = await import('firebase/firestore');
+              // Delete children subcollection
+              const childrenSnap = await getDocs(collection(db, 'users', user.uid, 'children'));
+              for (const child of childrenSnap.docs) {
+                await deleteDoc(doc(db, 'users', user.uid, 'children', child.id));
+              }
+              // Delete user document
+              await deleteDoc(doc(db, 'users', user.uid));
+              // Delete Firebase Auth account
+              await user.delete();
+            } catch (e: any) {
+              Alert.alert('Error', 'Could not delete account. Please sign out and sign back in first, then try again.');
+            }
+          },
+        },
+      ]
+    );
+  };
+
+    const getInitials = (email: string) =>
     email ? email.substring(0, 2).toUpperCase() : 'SK';
 
   const getToggleValue = (label: string) => {
@@ -91,11 +123,6 @@ export default function ProfileScreen() {
 
   return (
     <View style={styles.root}>
-      <Image
-        source={require('../../../assets/images/kids-hero.png')}
-        style={styles.bgImage}
-        resizeMode="cover"
-      />
       <View style={styles.overlay} />
       <View style={[styles.orb, styles.orbTop]} />
       <View style={[styles.orb, styles.orbBottom]} />
@@ -108,7 +135,7 @@ export default function ProfileScreen() {
           {/* ── HEADER ── */}
           <View style={styles.header}>
             <Text style={styles.headerTitle}>Profile</Text>
-            <TouchableOpacity style={styles.editBtn} activeOpacity={0.8}>
+            <TouchableOpacity style={styles.editBtn} activeOpacity={0.8} onPress={() => router.push('/(app)/edit-profile' as any )}> 
               <Text style={styles.editBtnText}>✏️ Edit</Text>
             </TouchableOpacity>
           </View>
@@ -220,7 +247,6 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: '#0F0C29' },
-  bgImage: { position: 'absolute', width: '100%', height: '100%' },
   overlay: {
     position: 'absolute', width: '100%', height: '100%',
     backgroundColor: 'rgba(10, 8, 35, 0.9)',

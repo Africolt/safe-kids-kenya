@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   View, Text, ScrollView, TouchableOpacity,
-  StyleSheet, Image, Animated
+  StyleSheet, Animated
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -30,11 +30,6 @@ export default function SecurityHub() {
 
   return (
     <View style={styles.root}>
-      <Image
-        source={require('../../../assets/images/kids-hero.png')}
-        style={styles.bgImage}
-        resizeMode="cover"
-      />
       <View style={styles.overlay} />
       <View style={[styles.orb, styles.orbTop]} />
       <View style={[styles.orb, styles.orbBottom]} />
@@ -161,7 +156,7 @@ export default function SecurityHub() {
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.actionBtn, styles.actionBtnSecondary]}
-              onPress={() => router.push('/report')}
+              onPress={() => router.push('/(app)/report-incident' as any)}
               activeOpacity={0.85}
             >
               <Text style={styles.actionIcon}>📋</Text>
@@ -182,7 +177,6 @@ export default function SecurityHub() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: '#0F0C29' },
-  bgImage: { position: 'absolute', width: '100%', height: '100%' },
   overlay: {
     position: 'absolute', width: '100%', height: '100%',
     backgroundColor: 'rgba(10, 8, 35, 0.9)',

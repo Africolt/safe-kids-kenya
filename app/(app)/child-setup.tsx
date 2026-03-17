@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
 import { router } from 'expo-router';
 import { auth, db } from '../../src/firebaseconfig';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, doc, setDoc } from 'firebase/firestore';
 
 const { height } = Dimensions.get('window');
 
@@ -105,6 +105,10 @@ export default function ChildProfileSetup() {
       for (const c of allChildren) {
         await addDoc(collection(db, 'users', user.uid, 'children'), c);
       }
+
+      // Mark parent as having children set up
+      await setDoc(doc(db, 'users', user.uid), { hasChildren: true }, { merge: true });
+
       router.replace('/(app)/(tabs)/home');
     } catch (error: any) {
       Alert.alert('Error', error.message);

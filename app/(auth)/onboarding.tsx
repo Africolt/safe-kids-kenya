@@ -10,6 +10,7 @@ import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '../../src/firebaseconfig' // Adjust path if needed
 import { useRouter } from 'expo-router';
 import { BlurView } from "expo-blur";
+import { SafeTotosLogo, SafeTotosWordmark } from '../../src/lib/SafeTotosLogo';
 
 
 const { height, width } = Dimensions.get('window');
@@ -62,16 +63,34 @@ export default function Onboarding() {
   const handleSignUp = async () => {
     if (!role) return Alert.alert('Please proceed to Choose your role', 'Are you a Parent or Caregiver?');
     if (!email || !password) return Alert.alert('Missing info','Please fill in all the fields');
+    if (password.length<6) return Alert.alert('Weak password','Input at least 6 characters');
     setLoading(true);
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      await setDoc(doc(db, 'users', userCredential.user.uid), { email, role });
+      const userCredential = await createUserWithEmailAndPassword(auth, email.trim(), password);
+
+      //Save role to Firestore immediately on signup
+      await setDoc(doc(db, 'users', userCredential.user.uid), { 
+        email: email.trim(),
+        role,
+        createdAt: new Date(),
+        ...(role === 'caregiver' && {
+        verificationStatus: 'pending',
+        available: false ,
+        }),
+      });
+
+      // Route based on role
       if (role === "parent") {
         router.replace("/(app)/child-setup");
-      } else {
-        router.replace("/(app)/(tabs)/home");
-      }
+      } else if(role === 'caregiver') {
+        router.replace("/(caregiver)/caregiver-setup");
+      } else 
+        router.replace('/(app)/(tabs)/home');
     } catch (error: any) {
+      const message =
+      error.code === 'auth/email-already-in-use' ? 'This email is already registered. Please sign in.' :
+      error.code === 'auth/invalid-email' ? 'Please enter a valid email address.' :
+      'Sign up failed. Please try again.';
       Alert.alert('Error', error.message);
     } finally {
       setLoading(false);
@@ -114,14 +133,17 @@ export default function Onboarding() {
           {!showForm && (
             <Animated.View style={[styles.heroContainer, { opacity: fadeAnim }]}>
               {/* Logo badge */}
-              <View style={styles.logoBadge}>
-                <Text style={styles.logoEmoji}>🛡️</Text>
-              </View>
-
-              <Text style={styles.heroTitle}>Safe Kids{'\n'}Kenya</Text>
-              <Text style={styles.heroSubtitle}>
-                Protecting children across Kenya —{'\n'}
-                connecting parents with trusted caregivers
+              <Image
+                source={require('../../assets/images/safe-totos-logo.png')}
+                style={{ width: 180, height: 180, resizeMode: 'contain' }}
+              />
+              <Text style={{
+                fontFamily: 'DancingScript',
+                fontStyle: 'italic',
+                fontSize: 22,
+                textAlign: 'center',
+              }}>
+                Peace of mind for working parents
               </Text>
 
               {/* Stats row */}
@@ -323,12 +345,12 @@ const styles = StyleSheet.create({
     paddingBottom: 48,
   },
   logoBadge: {
-    width: 64,
-    height: 64,
-    borderRadius: 20,
-    backgroundColor: 'rgba(124, 58, 237, 0.35)',
+    width: 120,
+    height: 120,
+    borderRadius: 30,
+    backgroundColor: 'rgba(43, 191, 191, 0.15)',
     borderWidth: 1,
-    borderColor: 'rgba(196, 132, 252, 0.4)',
+    borderColor: 'rgba(43, 191, 191, 0.3)',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 20,
@@ -558,7 +580,7 @@ const styles = StyleSheet.create({
     elevation: 10,
   },
   submitBtnLoading: {
-    backgroundColor: '#5B21B6',
+    backgroundColor: '#F5F3FF',
     shadowOpacity: 0,
   },
   submitText: {

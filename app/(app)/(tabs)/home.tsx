@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import {
   View, Text, ScrollView, TouchableOpacity,
-  StyleSheet, Dimensions, Image
+  StyleSheet, Dimensions
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, getDocs, query, where, orderBy, onSnapshot } from 'firebase/firestore';
 import { db, auth } from '../../../src/firebaseconfig';
 import { BlurView } from 'expo-blur';
+import { SafeTotosWordmark } from '../../../src/lib/SafeTotosLogo';
 
 const { width } = Dimensions.get('window');
 
@@ -21,6 +22,9 @@ export default function Home() {
     { title: 'Playground Check', time: '2:00 PM', icon: '🛝', status: 'pending' },
     { title: 'Home Arrival', time: '4:15 PM', icon: '🏠', status: 'pending' },
   ]);
+  const [bookings, setBookings] = useState<any[]>([]);
+  const [loadingBookings, setLoadingBookings] = useState(true);
+  const [parentName, setParentName] = useState('');
 
   useEffect(() => {
     const updateTime = () => {
@@ -42,12 +46,36 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const uid = auth.currentUser?.uid;
+        if (!uid) return;
+
+        //fetch user name
+        const { doc, getDoc }= await import('firebase/firestore');
+        const userSnap = await getDoc(doc(db, 'users', uid));
+        if (userSnap.exists()) {
+          setParentName(userSnap.data().firstName ?? '');
+        }
+        //existing alerts + zones
         const alertsSnapshot = await getDocs(collection(db, 'alerts'));
         setAlerts(alertsSnapshot.docs.length);
         const zonesSnapshot = await getDocs(collection(db, 'safeZones'));
         setSafeZones(zonesSnapshot.docs.length || 5);
+
+        //Fetch this parent's bookings
+        const q = query(
+          collection(db, 'bookings'),
+          where('parentId', '==', uid),
+          orderBy('createdAt', 'desc')
+        );
+        const unsub = onSnapshot(q, (snap) => {
+          const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+          setBookings(data);
+          setLoadingBookings(false);
+        });
+        return unsub;
       } catch (error) {
         console.error('Error fetching data:', error);
+        setLoadingBookings(false);
       }
     };
     fetchData();
@@ -56,11 +84,6 @@ export default function Home() {
   return (
     <View style={styles.root}>
       {/* Background image */}
-      <Image
-        source={require('../../../assets/images/kids-hero.png')}
-        style={styles.bgImage}
-        resizeMode="cover"
-      />
       <View style={styles.overlay} />
 
       {/* Decorative orbs */}
@@ -76,8 +99,8 @@ export default function Home() {
           {/* ── HEADER ── */}
           <View style={styles.header}>
             <View>
-              <Text style={styles.greeting}>{greeting} 👋</Text>
-              <Text style={styles.headerTitle}>Safe Kids Kenya</Text>
+              <Text style={styles.greeting}>{greeting}{parentName ? `,${parentName}`: ''} 👋</Text>
+              <SafeTotosWordmark size={18} />
             </View>
             <View style={styles.timeBadge}>
               <Text style={styles.timeText}>{currentTime}</Text>
@@ -137,13 +160,72 @@ export default function Home() {
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.actionBtn, styles.actionBtnSecondary]}
-              onPress={() => router.push('/report')}
+              onPress={() => router.push('/(app)/report-incident' as any)}
               activeOpacity={0.85}
             >
               <Text style={styles.actionIcon}>🚨</Text>
               <Text style={styles.actionBtnTextDark}>Report Incident</Text>
             </TouchableOpacity>
           </View>
+
+          {/* ── UPCOMING BOOKINGS ── */}
+<View style={styles.sectionHeader}>
+  <Text style={styles.sectionTitle}>Upcoming Bookings</Text>
+  <TouchableOpacity onPress={() => router.push('/(app)/booking' as any)}>
+    <Text style={styles.sectionLink}>+ Book</Text>
+  </TouchableOpacity>
+</View>
+
+{loadingBookings ? (
+  <BlurView intensity={25} tint="dark" style={styles.glassCard}>
+    <Text style={styles.loadingText}>Loading bookings...</Text>
+  </BlurView>
+) : bookings.length === 0 ? (
+  <BlurView intensity={25} tint="dark" style={styles.glassCard}>
+    <TouchableOpacity
+      style={styles.emptyBooking}
+      onPress={() => router.push('/(app)/search' as any)}
+      activeOpacity={0.8}
+    >
+      <Text style={styles.emptyBookingEmoji}>👩‍🍼</Text>
+      <View style={styles.emptyBookingText}>
+        <Text style={styles.emptyBookingTitle}>No bookings yet</Text>
+        <Text style={styles.emptyBookingSub}>Find a caregiver →</Text>
+      </View>
+    </TouchableOpacity>
+  </BlurView>
+) : (
+  bookings.slice(0, 3).map((b) => {
+    const statusColors: Record<string, {color: string; bg: string}> = {
+      pending:   { color: '#FBBF24', bg: 'rgba(251,191,36,0.12)' },
+      confirmed: { color: '#34D399', bg: 'rgba(52,211,153,0.12)' },
+      completed: { color: '#38BDF8', bg: 'rgba(56,189,248,0.12)' },
+      cancelled: { color: '#F87171', bg: 'rgba(248,113,113,0.12)' },
+    };
+    const sc = statusColors[b.status] ?? statusColors.pending;
+    return (
+      <TouchableOpacity key={b.id} activeOpacity={0.85}
+        onPress={() => router.push(`/(app)/booking-confirmation?id=${b.id}` as any)}
+      >
+        <BlurView intensity={22} tint="dark" style={styles.bookingCard}>
+          <View style={styles.bookingCardTop}>
+            <Text style={styles.bookingCardService}>{b.service}</Text>
+            <View style={[styles.bookingStatusBadge, { backgroundColor: sc.bg }]}>
+              <Text style={[styles.bookingStatusText, { color: sc.color }]}>
+                {b.status.charAt(0).toUpperCase() + b.status.slice(1)}
+              </Text>
+            </View>
+          </View>
+          <View style={styles.bookingCardMeta}>
+            <Text style={styles.bookingCardMetaText}>📅 {b.dateLabel}</Text>
+            <Text style={styles.bookingCardMetaText}>🕐 {b.time}</Text>
+            <Text style={styles.bookingCardMetaText}>💰 KSh {b.total?.toLocaleString()}</Text>
+          </View>
+        </BlurView>
+      </TouchableOpacity>
+    );
+  })
+)}
 
           {/* ── RECENT ACTIVITY ── */}
           <Text style={styles.sectionTitle}>Recent Activity</Text>
@@ -213,7 +295,7 @@ export default function Home() {
           {/* ── GET HELP CTA ── */}
           <TouchableOpacity
             style={styles.helpBtn}
-            onPress={() => router.push('/help')}
+            onPress={() => router.push('/(app)/emergency' as any)}
             activeOpacity={0.85}
           >
             <Text style={styles.helpBtnText}>🆘  Get Help Now</Text>
@@ -227,7 +309,6 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: '#0F0C29' },
-  bgImage: { position: 'absolute', width: '100%', height: '100%' },
   overlay: {
     position: 'absolute', width: '100%', height: '100%',
     backgroundColor: 'rgba(10, 8, 35, 0.88)',
@@ -354,4 +435,21 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5, shadowRadius: 20, elevation: 12,
   },
   helpBtnText: { color: '#fff', fontSize: 16, fontWeight: '800', letterSpacing: 0.3 },
+
+  //upcoming bookings
+  sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
+sectionLink: { color: '#38BDF8', fontSize: 13, fontWeight: '700' },
+loadingText: { color: 'rgba(186,230,253,0.4)', fontSize: 13, textAlign: 'center', padding: 16 },
+emptyBooking: { flexDirection: 'row', alignItems: 'center', gap: 14, padding: 8 },
+emptyBookingEmoji: { fontSize: 32 },
+emptyBookingText: { flex: 1 },
+emptyBookingTitle: { color: '#F0F9FF', fontWeight: '700', fontSize: 14 },
+emptyBookingSub: { color: '#38BDF8', fontSize: 12, marginTop: 3 },
+bookingCard: { borderRadius: 16, overflow: 'hidden', padding: 14, marginBottom: 10, borderWidth: 1, borderColor: 'rgba(255,255,255,0.07)' },
+bookingCardTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
+bookingCardService: { color: '#F0F9FF', fontWeight: '700', fontSize: 14 },
+bookingStatusBadge: { borderRadius: 8, paddingHorizontal: 10, paddingVertical: 4 },
+bookingStatusText: { fontSize: 11, fontWeight: '700' },
+bookingCardMeta: { flexDirection: 'row', gap: 12, flexWrap: 'wrap' },
+bookingCardMetaText: { color: 'rgba(186,230,253,0.55)', fontSize: 12 },
 });

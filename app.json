@@ -34,11 +34,10 @@
       }
     },
     "plugins": [
-      "react-native-reanimated",
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "Safe Totos needs location to show safe zones."
+          "locationAlwaysAndWhenInUsePermission": "Safe Totos needs location to show safe zones and keep your children safe."
         }
       ]
     ]

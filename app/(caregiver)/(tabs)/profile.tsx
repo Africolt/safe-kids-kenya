@@ -159,25 +159,32 @@ export default function CaregiverProfile() {
 
               <TouchableOpacity
                 style={styles.legalBtn}
-                onPress={() => router.push('/(app)/caregiver-agreement' as any)}
+                onPress={() => router.push('/caregiver-agreement' as any)}
                 activeOpacity={0.85}
               >
                 <Text style={styles.legalBtnText}>📋 Caregiver Agreement</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.legalBtn}
-                onPress={() => router.push('/(app)/privacy-policy' as any)}
+                onPress={() => router.push('/privacy-policy' as any)}
                 activeOpacity={0.85}
               >
                 <Text style={styles.legalBtnText}>🔒 Privacy Policy</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.legalBtn}
-                onPress={() => router.push('/(app)/terms-of-service' as any)}
+                onPress={() => router.push('/terms-of-service' as any)}
                 activeOpacity={0.85}
               >
                 <Text style={styles.legalBtnText}>📄 Terms of Service</Text>
             </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.legalBtn}
+                onPress={() => router.push('/theme-settings' as any)}
+                activeOpacity={0.85}
+              >
+                <Text style={styles.legalBtnText}>🎨 Theme & Appearance</Text>
+              </TouchableOpacity>
           </View>
 
           {/* Avatar + verification */}

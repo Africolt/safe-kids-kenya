@@ -66,16 +66,18 @@ export default function SignIn() {
 
   return (
     <View style={styles.root}>
-      <Image source={require('../../assets/images/kids-hero.png')} style={styles.bgImage} resizeMode="cover" />
       <View style={styles.overlay} />
       <View style={[styles.orb, styles.orbTop]} />
       <View style={[styles.orb, styles.orbBottom]} />
       <SafeAreaView style={styles.safeArea}>
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.kav}>
           <View style={styles.logoBadge}>
-            <SafeTotosLogo size={80} />
-            <SafeTotosWordmark size={26} />
+            <Image 
+              source={require('../../assets/images/safe-totos-logo.png')}
+              style={{ width: 120, height: 120, resizeMode: 'contain' }}
+            />
           </View>
+          
           <Animated.View style={[styles.cardWrap, { transform: [{ translateY: cardTranslateY }] }]}>
             <BlurView intensity={35} tint="dark" style={styles.card}>
               <Text style={styles.cardTitle}>Welcome back</Text>

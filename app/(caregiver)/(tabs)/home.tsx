@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: '#080C14' },
   overlay: { position: 'absolute', width: '100%', height: '100%', backgroundColor: 'rgba(8,12,20,0.95)' },
   orb: { position: 'absolute', borderRadius: 999, opacity: 0.1 },
-  orbTop: { width: 220, height: 220, backgroundColor: '#34D399', top: -70, right: -50 },
+  orbTop: { width: 220, height: 220, backgroundColor: '##0284C7', top: -70, right: -50 },
   orbBottom: { width: 180, height: 180, backgroundColor: '#0284C7', bottom: 60, left: -50 },
   safeArea: { flex: 1 },
   scrollContent: { paddingHorizontal: 16, paddingTop: 8 },

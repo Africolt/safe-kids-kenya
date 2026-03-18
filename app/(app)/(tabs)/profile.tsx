@@ -32,9 +32,9 @@ const MENU_SECTIONS = [
     title: 'Support',
     items: [
       { icon: '❓', label: 'Help & FAQ', route: '/(app)/parental-guidance' },
-      { icon: '⭐', label: 'Rate the App', route: '/(app)/terms-of-service' },
-      { icon: '📋', label: 'Privacy Policy', route: '/(app)/privacy-policy' },
-      { icon: '🎨', label: 'Theme & Appearance', route: '/(app)/theme-settings' },
+      { icon: '⭐', label: 'Rate the App', route: '/terms-of-service' },
+      { icon: '📋', label: 'Privacy Policy', route: '/privacy-policy' },
+      { icon: '🎨', label: 'Theme & Appearance', route: '/theme-settings' },
     ],
   },
 ];
@@ -235,8 +235,16 @@ export default function ProfileScreen() {
             <Text style={styles.signOutText}>Sign Out</Text>
           </TouchableOpacity>
 
+          <TouchableOpacity
+            style={styles.deleteBtn}
+            onPress={handleDeleteAccount}
+            activeOpacity={0.85}
+          >
+            <Text style={styles.deleteBtnText}>🗑 Delete Account</Text>
+          </TouchableOpacity>
+
           {/* Version */}
-          <Text style={styles.version}>Safe Kids Kenya v1.0.0</Text>
+          <Text style={styles.version}>Safe Totos v1.0.0</Text>
 
           <View style={{ height: 32 }} />
         </ScrollView>
@@ -344,6 +352,8 @@ const styles = StyleSheet.create({
   menuDivider: { height: 1, backgroundColor: 'rgba(255,255,255,0.05)', marginLeft: 64 },
 
   // Sign out
+  deleteBtn: { backgroundColor: 'rgba(239,68,68,0.08)', borderRadius: 10, paddingHorizontal: 14, paddingVertical: 12, borderWidth: 1, borderColor: 'rgba(239,68,68,0.2)', marginTop: 10, alignItems: 'center' },
+  deleteBtnText: { color: '#EF4444', fontSize: 13, fontWeight: '600' },
   signOutBtn: {
     borderRadius: 16, paddingVertical: 16, alignItems: 'center',
     backgroundColor: 'rgba(248,113,133,0.1)',

@@ -15,11 +15,6 @@ export default function AppLayout() {
       <Stack.Screen name="report-incident" />
       <Stack.Screen name="emergency" />
       <Stack.Screen name="sos" />
-      <Stack.Screen name="privacy-policy" />
-      <Stack.Screen name="terms-of-service" />
-      <Stack.Screen name="caregiver-agreement" />
-      <Stack.Screen name="theme-settings" />
-      <Stack.Screen name="edit-profile" />
     </Stack>
   );
 }

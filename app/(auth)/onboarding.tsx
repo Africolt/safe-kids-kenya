@@ -10,7 +10,6 @@ import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '../../src/firebaseconfig' // Adjust path if needed
 import { useRouter } from 'expo-router';
 import { BlurView } from "expo-blur";
-import { SafeTotosLogo, SafeTotosWordmark } from '../../src/lib/SafeTotosLogo';
 
 
 const { height, width } = Dimensions.get('window');
@@ -201,7 +200,7 @@ export default function Onboarding() {
                 </TouchableOpacity>
 
                 <Text style={styles.cardTitle}>Create Account</Text>
-                <Text style={styles.cardSubtitle}>Join Safe Kids Kenya today</Text>
+                <Text style={styles.cardSubtitle}>Join Safe Totos Kenya today</Text>
 
                 {/* Role selector — FIRST for better UX */}
                 <Text style={styles.fieldLabel}>I AM A...</Text>

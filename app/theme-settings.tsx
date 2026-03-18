@@ -2,8 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
-import { useTheme } from '../../src/lib/ThemeContext';
-import ThemePicker from '../../src/components/themePicker';
+import { useTheme } from '../src/lib/ThemeContext';
+import ThemePicker from '../src/components/themePicker';
 
 export default function ThemeSettings() {
   const { theme } = useTheme();

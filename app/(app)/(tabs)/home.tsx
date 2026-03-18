@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
   View, Text, ScrollView, TouchableOpacity,
-  StyleSheet, Dimensions
+  StyleSheet, Dimensions, Image
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { collection, getDocs, query, where, orderBy, onSnapshot } from 'firebase/firestore';
 import { db, auth } from '../../../src/firebaseconfig';
 import { BlurView } from 'expo-blur';
-import { SafeTotosWordmark } from '../../../src/lib/SafeTotosLogo';
 
 const { width } = Dimensions.get('window');
 
@@ -98,9 +97,14 @@ export default function Home() {
         >
           {/* ── HEADER ── */}
           <View style={styles.header}>
-            <View>
-              <Text style={styles.greeting}>{greeting}{parentName ? `,${parentName}`: ''} 👋</Text>
-              <SafeTotosWordmark size={18} />
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+              <Image
+                source={require('../../../assets/images/safe-totos-logo.png')}
+                style={{ width: 36, height: 36, resizeMode: 'contain' }}
+              />
+              <View>
+                <Text style={styles.greeting}>{greeting}{parentName ? `, ${parentName}` : ''} 👋</Text>
+              </View>
             </View>
             <View style={styles.timeBadge}>
               <Text style={styles.timeText}>{currentTime}</Text>

@@ -33,6 +33,14 @@
         "projectId": "109d2a47-acd0-4c74-9edf-2c937ccff6cd"
       }
     },
-    "plugins": []
+    "plugins": [
+      "react-native-reanimated",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Safe Totos needs location to show safe zones."
+        }
+      ]
+    ]
   }
 }

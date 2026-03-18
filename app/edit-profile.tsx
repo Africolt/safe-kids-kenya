@@ -3,9 +3,9 @@ import { View, Text, StyleSheet, TouchableOpacity, TextInput, ScrollView, Alert,
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
 import { router } from 'expo-router';
-import { auth, db } from '../../src/firebaseconfig';
+import { auth, db } from '../src/firebaseconfig';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { useTheme } from '../../src/lib/ThemeContext';
+import { useTheme } from '../src/lib/ThemeContext';
 
 export default function EditProfile() {
   const { theme } = useTheme();

@@ -77,6 +77,11 @@ useEffect(() => {
           <Stack.Screen name="(app)" />
           <Stack.Screen name="(caregiver)" />
           <Stack.Screen name="index" />
+          <Stack.Screen name="theme-settings" options={{ headerShown: false }} />
+          <Stack.Screen name="edit-profile" options={{ headerShown: false }} />
+          <Stack.Screen name="privacy-policy" options={{ headerShown: false }} />
+          <Stack.Screen name="terms-of-service" options={{ headerShown: false }} />
+          <Stack.Screen name="caregiver-agreement" options={{ headerShown: false }} />
         </Stack>
       </SafeAreaProvider>
     </ThemeProvider>

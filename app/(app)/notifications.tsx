@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
 import { router } from 'expo-router';
 import { collection, query, where, orderBy, onSnapshot, doc, updateDoc, addDoc, serverTimestamp } from 'firebase/firestore';
-import { auth, db } from '../../../src/firebaseconfig';
+import { auth, db } from '../../src/firebaseconfig';
 
 const { width } = Dimensions.get('window');
 type NotifType = 'alert' | 'booking' | 'message' | 'payment' | 'system';

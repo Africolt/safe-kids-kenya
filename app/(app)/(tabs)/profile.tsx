@@ -202,8 +202,10 @@ export default function ProfileScreen() {
                     <TouchableOpacity
                       style={styles.menuRow}
                       activeOpacity={item.toggle ? 1 : 0.7}
-                      onPress={() => !item.toggle && router.push(item.route as any)}
-                    >
+                      onPress={() => {
+                        if(item.toggle) return;
+                        router.push(item.route as any);
+                      }}>
                       <View style={styles.menuIconWrap}>
                         <Text style={styles.menuIcon}>{item.icon}</Text>
                       </View>

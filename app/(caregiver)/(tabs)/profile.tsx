@@ -149,42 +149,6 @@ export default function CaregiverProfile() {
             <TouchableOpacity style={styles.signOutBtn} onPress={handleSignOut}>
               <Text style={styles.signOutText}>Sign Out</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.deleteBtn}
-                onPress={handleDeleteAccount}
-                activeOpacity={0.85}
-              >
-                <Text style={styles.deleteBtnText}>🗑 Delete Account</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.legalBtn}
-                onPress={() => router.push('/caregiver-agreement' as any)}
-                activeOpacity={0.85}
-              >
-                <Text style={styles.legalBtnText}>📋 Caregiver Agreement</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.legalBtn}
-                onPress={() => router.push('/privacy-policy' as any)}
-                activeOpacity={0.85}
-              >
-                <Text style={styles.legalBtnText}>🔒 Privacy Policy</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.legalBtn}
-                onPress={() => router.push('/terms-of-service' as any)}
-                activeOpacity={0.85}
-              >
-                <Text style={styles.legalBtnText}>📄 Terms of Service</Text>
-            </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.legalBtn}
-                onPress={() => router.push('/theme-settings' as any)}
-                activeOpacity={0.85}
-              >
-                <Text style={styles.legalBtnText}>🎨 Theme & Appearance</Text>
-              </TouchableOpacity>
           </View>
 
           {/* Avatar + verification */}
@@ -332,6 +296,25 @@ export default function CaregiverProfile() {
           </TouchableOpacity>
 
           <View style={{ height: 60 }} />
+          
+              {/* Delete + Legal */}
+          <TouchableOpacity style={styles.deleteBtn} onPress={handleDeleteAccount} activeOpacity={0.85}>
+            <Text style={styles.deleteBtnText}>🗑 Delete Account</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.legalBtn} onPress={() => router.push('/caregiver-agreement' as any)} activeOpacity={0.85}>
+            <Text style={styles.legalBtnText}>📋 Caregiver Agreement</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.legalBtn} onPress={() => router.push('/privacy-policy' as any)} activeOpacity={0.85}>
+            <Text style={styles.legalBtnText}>🔒 Privacy Policy</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.legalBtn} onPress={() => router.push('/terms-of-service' as any)} activeOpacity={0.85}>
+            <Text style={styles.legalBtnText}>📄 Terms of Service</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.legalBtn} onPress={() => router.push('/theme-settings' as any)} activeOpacity={0.85}>
+            <Text style={styles.legalBtnText}>🎨 Theme & Appearance</Text>
+          </TouchableOpacity>
+          <View style={{ height: 40 }} />
+
         </ScrollView>
       </SafeAreaView>
     </View>

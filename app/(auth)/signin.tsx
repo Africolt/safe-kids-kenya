@@ -27,6 +27,17 @@ export default function SignIn() {
 
   const cardTranslateY = cardAnim.interpolate({ inputRange: [0, 1], outputRange: [height * 0.3, 0] });
 
+  const handleForgotPassword = async () => {
+  if (!email) return Alert.alert('Enter your email first', 'Type your email above then tap Forgot Password.');
+  try {
+    const { sendPasswordResetEmail } = await import('firebase/auth');
+    await sendPasswordResetEmail(auth, email.trim());
+    Alert.alert('Email Sent ✅', 'Check your inbox for a password reset link.');
+  } catch (e: any) {
+    Alert.alert('Error', 'Could not send reset email. Check your email address.');
+  }
+};
+
   const handleSignIn = async () => {
     if (!email || !password) return Alert.alert('Missing info', 'Please fill in all fields');
     setLoading(true);
@@ -92,9 +103,10 @@ export default function SignIn() {
                 <Text style={styles.inputIcon}>🔒</Text>
                 <TextInput style={styles.input} placeholder="••••••••" placeholderTextColor="rgba(186,230,253,0.3)" value={password} onChangeText={setPassword} secureTextEntry onFocus={() => setFocusedField('password')} onBlur={() => setFocusedField(null)} />
               </View>
-              <TouchableOpacity style={styles.forgotBtn}>
+              <TouchableOpacity style={styles.forgotBtn} onPress={handleForgotPassword}>
                 <Text style={styles.forgotText}>Forgot password?</Text>
               </TouchableOpacity>
+
               <TouchableOpacity style={[styles.signInBtn, loading && styles.signInBtnLoading]} onPress={handleSignIn} disabled={loading} activeOpacity={0.85}>
                 <Text style={styles.signInBtnText}>{loading ? 'Signing in...' : 'Sign In →'}</Text>
               </TouchableOpacity>

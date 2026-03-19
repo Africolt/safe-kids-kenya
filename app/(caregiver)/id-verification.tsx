@@ -139,7 +139,10 @@ export default function IDVerification() {
           <BlurView intensity={18} tint="dark" style={styles.helpCard}>
             <Text style={styles.helpTitle}>Need help?</Text>
             <Text style={styles.helpText}>If your document was rejected or you need assistance, contact our support team.</Text>
-            <TouchableOpacity style={styles.helpBtn}>
+            <TouchableOpacity style={styles.helpBtn} onPress={() => {
+              const { Linking } = require('react-native');
+              Linking.openURL('mailto:support@safetotos.co.ke');
+            }}>
               <Text style={styles.helpBtnText}>💬 Contact Support</Text>
             </TouchableOpacity>
           </BlurView>

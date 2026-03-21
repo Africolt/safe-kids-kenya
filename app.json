@@ -34,7 +34,6 @@
       }
     },
     "plugins": [
-      "react-native-reanimated",
       [
         "expo-location",
         {
@@ -46,7 +45,8 @@
         {
           "photosPermission": "Safe Totos needs photo access to set your profile picture."
         }
-      ]
+      ],
+      "react-native-webview"
     ]
   }
 }

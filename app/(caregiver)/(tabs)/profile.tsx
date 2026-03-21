@@ -8,7 +8,7 @@ import { auth, db } from '../../../src/firebaseconfig';
 
 const SERVICES = ['After School Care', 'School Pickup/Dropoff', 'Full Day Care', 'Tutoring', 'Special Needs Care', 'Overnight Care'];
 const AGE_GROUPS = ['Infants (0-1)', 'Toddlers (1-3)', 'Pre-School (3-5)', 'School Age (5-12)', 'Teens (12-17)'];
-const LANGUAGES = ['English', 'Swahili', 'Kikuyu', 'Luo', 'Kamba', 'Luhya'];
+const LANGUAGES = ['English', 'Swahili', 'Kikuyu', 'Luo', 'Kamba', 'Luhya', 'other'];
 const CERTIFICATIONS = ['First Aid', 'Child Protection', 'Early Childhood', 'Special Needs', 'Food Safety'];
 
 export default function CaregiverProfile() {

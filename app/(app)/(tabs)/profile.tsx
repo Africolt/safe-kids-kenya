@@ -14,7 +14,7 @@ const MENU_SECTIONS = [
   {
     title: 'Account',
     items: [
-      { icon: '👤', label: 'Edit Profile', route: '/(app)/edit-profile' },
+      { icon: '👤', label: 'Edit Profile', route: '/edit-profile' },
       { icon: '🔔', label: 'Notifications', route: '/(app)/notifications', toggle: true },
       { icon: '📍', label: 'Safe Zones', route: '/(app)/map' },
       { icon: '👨‍👩‍👧', label: 'Family Members', route: '/(app)/child-setup' },
@@ -135,7 +135,7 @@ export default function ProfileScreen() {
           {/* ── HEADER ── */}
           <View style={styles.header}>
             <Text style={styles.headerTitle}>Profile</Text>
-            <TouchableOpacity style={styles.editBtn} activeOpacity={0.8} onPress={() => router.push('/(app)/edit-profile' as any )}> 
+            <TouchableOpacity style={styles.editBtn} activeOpacity={0.8} onPress={() => router.push('/edit-profile' as any )}> 
               <Text style={styles.editBtnText}>✏️ Edit</Text>
             </TouchableOpacity>
           </View>

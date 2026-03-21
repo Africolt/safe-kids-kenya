@@ -62,6 +62,10 @@ useEffect(() => {
       return;
     }
 
+    // Allow root level screens (legal, settings)
+    const isRootScreen = !inAuthGroup && !inAppGroup && !inCaregiverGroup;
+    if (isRootScreen) return;
+
     if (role === 'caregiver') {
       if (!inCaregiverGroup) router.replace('/(caregiver)/(tabs)/home');
     } else {

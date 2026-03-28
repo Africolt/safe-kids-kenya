@@ -181,7 +181,7 @@ export default function CaregiverEarnings() {
               <Text style={styles.sectionTitle}>Transaction History</Text>
               {filtered.length === 0 ? (
                 <BlurView intensity={20} tint="dark" style={styles.emptyCard}>
-                  <Text style={styles.emptyEmoji}>💸</Text>
+                  <Text style={styles.emptyEmoji}>💲</Text>
                   <Text style={styles.emptyTitle}>No transactions yet</Text>
                   <Text style={styles.emptySub}>Completed sessions will appear here</Text>
                 </BlurView>

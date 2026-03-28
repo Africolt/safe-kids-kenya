@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Dimensions, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
 import { router } from 'expo-router';
 import { collection, query, where, onSnapshot, doc, getDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../../../src/firebaseconfig';
-import { SafeTotosWordmark } from '../../../src/lib/SafeTotosLogo';
 
 const { width } = Dimensions.get('window');
 
@@ -109,10 +108,13 @@ export default function CaregiverHome() {
 
           {/* Header */}
           <View style={styles.header}>
-            <View>
-              <SafeTotosWordmark size={18} />
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8}}>
+              <Image
+                source={require('../../../assets/images/safe-totos-logo.png')}
+                style={{ width:32, height: 32, resizeMode: 'contain'}}
+              />
               <Text style={styles.greeting}>{getGreeting()}, {firstName} 👋</Text>
-              <Text style={styles.date}>{time.toLocaleDateString('en-KE', { weekday: 'long', day: 'numeric', month: 'long' })}</Text>
+              <Text style={styles.date}>{new Date().toLocaleDateString('en-KE', { weekday: 'long', day: 'numeric', month: 'long' })}</Text>
             </View>
             <View style={styles.headerActions}>
               <TouchableOpacity style={styles.headerBtn} onPress={() => router.push('/(app)/notifications' as any)}>
@@ -240,7 +242,7 @@ export default function CaregiverHome() {
             {[
               { emoji: '📅', label: 'Availability', route: '/(caregiver)/availability' },
               { emoji: '🪪', label: 'Verify Docs', route: '/(caregiver)/id-verification' },
-              { emoji: '💬', label: 'Messages', route: '/(app)/chat' },
+              { emoji: '💬', label: 'Messages', route: '/(caregiver)/(tabs)/bookings' },
               { emoji: '🏥', label: 'Medical', route: '/(caregiver)/medical-emergency' },
             ].map((a, i) => (
               <TouchableOpacity

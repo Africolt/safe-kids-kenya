@@ -163,7 +163,7 @@ export default function EmergencyScreen() {
                 {i < FAMILY_CONTACTS.length - 1 && <View style={styles.familyDivider} />}
               </View>
             ))}
-            <TouchableOpacity style={styles.addContactBtn}>
+            <TouchableOpacity style={styles.addContactBtn} onPress={() => Alert.alert('Coming Soon', 'Custom emergency contacts will be available in the next update.')}>
               <Text style={styles.addContactText}>+ Add Emergency Contact</Text>
             </TouchableOpacity>
           </BlurView>
